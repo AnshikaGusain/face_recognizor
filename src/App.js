@@ -1,5 +1,4 @@
 import React,{Component} from "react";
-import './App.css';
 import Clarifai from "clarifai";
 import Navigation from "./components/Navigation/Navigation";
 import Signin from "./components/Signin/Signin";
@@ -9,11 +8,9 @@ import Logo from "./components/Logo/Logo";
 import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm";
 import Rank from "./components/Rank/Rank";
 import Particles from "react-tsparticles";
+import './App.css';
 
 
-const app = new Clarifai.App({
-  apiKey: '6e93463d0101470584f9d7a5b13effaa'
- });
 
 const initialState={
   input:"",
@@ -49,10 +46,10 @@ class App extends Component {
 
   loadUser=(data)=>{
     this.setState({user: {
-      id: data.id,
+      id: data._id,
       name:data.name,
       email:data.email,
-      entries:data.entries,
+      entries:data.noOfEntries,
       joined:data.joined
     }});
   }
@@ -80,40 +77,22 @@ class App extends Component {
 
   onButtonSubmit=()=>{
     this.setState({ImageUrl: this.state.input});
-    const raw = JSON.stringify({
-      "user_app_id": {
-        "user_id": "anshikagusain13_7448",
-        "app_id": "a156366dc46c4e40b4e86861d855a057"
-      },
-      "inputs": [
-        {
-          "data": {
-            "image": {
-              "url": this.state.input
-            }
-          }
-        }
-      ]
-    });
-    
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Key e5d0996a8030467ba6edba8bc2f43306'
-      },
-      body: raw
-    };
     
     // NOTE: MODEL_VERSION_ID is optional, you can also call prediction with the MODEL_ID only
     // https://api.clarifai.com/v2/models/{YOUR_MODEL_ID}/outputs
     // this will default to the latest version_id
     
-    fetch("https://api.clarifai.com/v2/models/face-detection/outputs", requestOptions)
-      .then(response => response.text())
+    fetch("http://localhost:3000/imageUrl", {
+      method:"post",
+      headers:{"Content-type":"application/json"},
+      body: JSON.stringify({
+        imageUrl:this.state.input
+      })
+    })
+      .then(response =>response.json())
       .then(result =>{
         if(result){
-          fetch("https://damp-taiga-90498.herokuapp.com/image",{
+          fetch("http://localhost:3000/image",{
             method:"put",
             headers:{"Content-Type":"application/json"},
             body: JSON.stringify({
@@ -125,7 +104,7 @@ class App extends Component {
           })
           .catch(console.log)
         }
-        this.displayBox(this.calculateBoundingBox(JSON.parse(result, null, 2).outputs[0].data.regions[0].region_info.bounding_box))
+        this.displayBox(this.calculateBoundingBox(result.outputs[0].data.regions[0].region_info.bounding_box))
       })
       
       .catch(error => console.log('error', error));

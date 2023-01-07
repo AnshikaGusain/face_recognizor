@@ -21,7 +21,7 @@ class Register extends Component{
     }
 
     onSubmitRegister=()=>{
-        fetch("https://damp-taiga-90498.herokuapp.com/register",{
+        fetch("http://localhost:3000/register",{
             method:'post',
             headers:{'Content-Type':'application/json'},
             body: JSON.stringify({
@@ -31,10 +31,11 @@ class Register extends Component{
             })
         }).then(res=>res.json())
         .then(user=>{
-            if(user.id){
+            if(user._id){
                 this.props.loadUser(user);
                 this.props.onRouteChange("home");
             }
+            // console.log(user);
         })
         .catch((err)=>console.log("Error"));
     }
@@ -50,15 +51,15 @@ class Register extends Component{
                             <legend className="f3 fw6 ph0 mh0">Register</legend>
                             <div className="mt3">
                                 <label className="db fw6 lh-copy f5" htmlFor="name">Name</label>
-                                <input onChange={this.onNameChange} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="text" name="name"  id="name"/>
+                                <input onChange={this.onNameChange} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100 text-dark" type="text" name="name"  id="name"/>
                             </div>
                             <div className="mt3">
                                 <label className="db fw6 lh-copy f5" htmlFor="email-address">Email</label>
-                                <input onChange={this.onEmailChange} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="email" name="email-address"  id="email-address"/>
+                                <input onChange={this.onEmailChange} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100 text-dark" type="email" name="email-address"  id="email-address"/>
                             </div>
                             <div className="mv3">
                                 <label className="db fw6 lh-copy f5" htmlFor="password">Password</label>
-                                <input onChange={this.onPasswordChange} className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="password" name="password"  id="password"/>
+                                <input onChange={this.onPasswordChange} className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100 text-dark" type="password" name="password"  id="password"/>
                             </div>
                             </fieldset>
                             <div className="">

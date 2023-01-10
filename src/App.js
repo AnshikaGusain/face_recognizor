@@ -82,7 +82,7 @@ class App extends Component {
     // https://api.clarifai.com/v2/models/{YOUR_MODEL_ID}/outputs
     // this will default to the latest version_id
     
-    fetch("http://localhost:3000/imageUrl", {
+    fetch("https://facerecog-backend.onrender.com/imageUrl", {
       method:"post",
       headers:{"Content-type":"application/json"},
       body: JSON.stringify({
@@ -92,7 +92,7 @@ class App extends Component {
       .then(response =>response.json())
       .then(result =>{
         if(result){
-          fetch("http://localhost:3000/image",{
+          fetch("https://facerecog-backend.onrender.com/image",{
             method:"put",
             headers:{"Content-Type":"application/json"},
             body: JSON.stringify({
